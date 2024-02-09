@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Will You Be My Valentine?</title>
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        #container {
+            text-align: center;
+        }
+
+        #yes {
+            display: none;
+            font-size: 24px;
+        }
+
+        #no, #yesButton {
+            font-size: 24px;
+            cursor: pointer;
+            margin: 10px;
+            position: absolute;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <p id="question">Will you be my Valentine?</p>
+        <button id="yesButton" onclick="growYes()">Yes</button>
+        <button id="no" ontouchmove="moveNo(event)" onmousemove="moveNo(event)" onclick="growYes()">No</button>
+        <p id="yes">Yes, I will be your Valentine! ❤️</p>
+    </div>
+
+    <script>
+        function growYes() {
+            document.getElementById('no').style.display = 'none';
+            document.getElementById('yesButton').style.display = 'none';
+            document.getElementById('question').style.display = 'none';
+
+            const yesElement = document.getElementById('yes');
+            yesElement.style.display = 'block';
+            let fontSize = 24;
+
+            const interval = setInterval(() => {
+                fontSize += 2;
+                yesElement.style.fontSize = `${fontSize}px`;
+
+                if (fontSize >= 60) {
+                    clearInterval(interval);
+                }
+            }, 100);
+        }
+
+        function moveNo(event) {
+            event.preventDefault();
+            const noButton = document.getElementById('no');
+            const bodyRect = document.body.getBoundingClientRect();
+            const elemRect = noButton.getBoundingClientRect();
+            const clientX = event.type.startsWith('touch') ? event.touches[0].clientX : event.clientX;
+            const clientY = event.type.startsWith('touch') ? event.touches[0].clientY : event.clientY;
+            const offsetX = clientX - elemRect.left - elemRect.width / 2;
+            const offsetY = clientY - elemRect.top - elemRect.height / 2;
+            const newX = clientX - offsetX - bodyRect.left;
+            const newY = clientY - offsetY - bodyRect.top;
+
+            noButton.style.left = `${newX}px`;
+            noButton.style.top = `${newY}px`;
+        }
+    </script>
+</body>
+</html>
