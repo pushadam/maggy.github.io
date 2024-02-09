@@ -11,22 +11,46 @@
             justify-content: center;
             height: 100vh;
             margin: 0;
+            background-color: #f7e0d6;
+            font-family: 'Arial', sans-serif;
         }
 
         #container {
             text-align: center;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        #question {
+            font-size: 28px;
+            color: #333;
+        }
+
+        #yes, #no, #yesButton {
+            font-size: 24px;
+            cursor: pointer;
+            padding: 10px 20px;
+            margin: 10px;
+            border: none;
+            border-radius: 5px;
+            color: #fff;
+        }
+
+        #yesButton {
+            background-color: #4caf50;
+        }
+
+        #no {
+            background-color: #f44336;
+            position: absolute;
         }
 
         #yes {
             display: none;
             font-size: 24px;
-        }
-
-        #no, #yesButton {
-            font-size: 24px;
-            cursor: pointer;
-            margin: 10px;
-            position: absolute;
+            color: #4caf50;
         }
     </style>
 </head>
@@ -34,7 +58,7 @@
     <div id="container">
         <p id="question">Will you be my Valentine?</p>
         <button id="yesButton" onclick="growYes()">Yes</button>
-        <button id="no" ontouchmove="moveNo(event)" onmousemove="moveNo(event)" onclick="growYes()">No</button>
+        <button id="no" ontouchmove="moveNo(event)" onmousemove="moveNo(event)" onclick="hideNo()">No</button>
         <p id="yes">Yes, I will be your Valentine! ❤️</p>
     </div>
 
@@ -72,6 +96,10 @@
 
             noButton.style.left = `${newX}px`;
             noButton.style.top = `${newY}px`;
+        }
+
+        function hideNo() {
+            document.getElementById('no').style.display = 'none';
         }
     </script>
 </body>
