@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Will You Be My Valentine?</title>
+    <title>ለማጊሻ </title>
     <style>
         body {
             display: flex;
@@ -15,7 +16,8 @@
             font-family: 'Arial', sans-serif;
         }
 
-        #container, #second-container {
+        #container,
+        #second-container {
             text-align: center;
             padding: 20px;
             background-color: #fff;
@@ -23,13 +25,18 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-        #question, #result {
+        #question,
+        #result {
             font-size: 28px;
             color: #333;
             margin-bottom: 20px;
         }
 
-        #yes, #no, #yesButton, #morning, #afternoon {
+        #yes,
+        #no,
+        #yesButton,
+        #morning,
+        #afternoon {
             font-size: 24px;
             cursor: pointer;
             padding: 10px 20px;
@@ -39,8 +46,16 @@
             color: #fff;
         }
 
-        #yesButton, #morning, #afternoon {
+        #yesButton,
+        #morning,
+        #afternoon {
             background-color: #4caf50;
+            transition: background-color 0.3s; /* Add transition for smooth effect */
+        }
+
+        #morning:hover,
+        #afternoon:hover {
+            background-color: #45a049; /* Change the background color on hover */
         }
 
         #no {
@@ -81,18 +96,22 @@
             width: 100%;
             max-width: 480px;
             height: auto;
+            margin-top: 20px; /* Add margin-top to separate the GIF from the question */
         }
     </style>
 </head>
+
 <body id="valentine-theme">
     <div id="container">
-        <p id="question">Will you be my Valentine?</p>
+        <p id="question">ስሚማ, in the words of Idris Elba</p>
+        <iframe src="https://giphy.com/embed/26gsr6U0uEzmf0nny" width="480" height="270" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/omaze-love-valentine-26gsr6U0uEzmf0nny"></a></p>
         <button id="yesButton" onclick="showSecondContainer()">Yes</button>
         <button id="no" ontouchmove="moveNo(event)" onmousemove="moveNo(event)" onclick="hideNo()">No</button>
     </div>
 
     <div id="second-container">
-        <iframe id="giphy-embed" src="https://giphy.com/embed/xT9IgKWQeoclWggTDO" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
+        <iframe id="giphy-embed" src="https://giphy.com/embed/xT9IgKWQeoclWggTDO" frameBorder="0" class="giphy-embed"
+            allowFullScreen></iframe>
         <p id="question">When are you free?</p>
         <button id="morning" onclick="showDateResult('morning')">Morning</button>
         <button id="afternoon" onclick="showDateResult('afternoon')">Afternoon</button>
@@ -231,4 +250,5 @@
         }
     </script>
 </body>
+
 </html>
