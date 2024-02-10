@@ -63,8 +63,10 @@
     </div>
 
     <script>
+        let noButton = document.getElementById('no');
+
         function growYes() {
-            document.getElementById('no').style.display = 'none';
+            noButton.style.display = 'none';
             document.getElementById('yesButton').style.display = 'none';
             document.getElementById('question').style.display = 'none';
 
@@ -72,35 +74,56 @@
             yesElement.style.display = 'block';
             let fontSize = 24;
 
-            const interval = setInterval(() => {
+            function animate() {
                 fontSize += 2;
                 yesElement.style.fontSize = `${fontSize}px`;
 
-                if (fontSize >= 60) {
-                    clearInterval(interval);
+                if (fontSize < 60) {
+                    requestAnimationFrame(animate);
                 }
-            }, 100);
+            }
+
+            animate();
+        }
+
+        function getRandomQuadrant() {
+            // Generate a random number between 0 and 2
+            const randomQuadrant = Math.floor(Math.random() * 3);
+            return randomQuadrant;
         }
 
         function moveNo(event) {
             event.preventDefault();
-            const noButton = document.getElementById('no');
-            const bodyRect = document.body.getBoundingClientRect();
-            const elemRect = noButton.getBoundingClientRect();
-            const clientX = event.type.startsWith('touch') ? event.touches[0].clientX : event.clientX;
-            const clientY = event.type.startsWith('touch') ? event.touches[0].clientY : event.clientY;
-            const offsetX = clientX - elemRect.left - elemRect.width / 2;
-            const offsetY = clientY - elemRect.top - elemRect.height / 2;
-            const newX = clientX - offsetX - bodyRect.left;
-            const newY = clientY - offsetY - bodyRect.top;
 
-            noButton.style.left = `${newX}px`;
-            noButton.style.top = `${newY}px`;
+            const cursorX = event.type.startsWith('touch') ? event.touches[0].clientX : event.clientX;
+            const cursorY = event.type.startsWith('touch') ? event.touches[0].clientY : event.clientY;
+
+            const elemRect = noButton.getBoundingClientRect();
+
+            const distanceThreshold = 100; // Adjust this value to control the distance threshold
+
+            // Calculate the distance between the cursor and the center of the button
+            const distance = Math.sqrt(
+                Math.pow(cursorX - (elemRect.left + elemRect.width / 2), 2) +
+                Math.pow(cursorY - (elemRect.top + elemRect.height / 2), 2)
+            );
+
+            // Move the button randomly to one of the remaining three quadrants if it's within the distance threshold
+            if (distance < distanceThreshold) {
+                const newX = Math.random() * window.innerWidth;
+                const newY = Math.random() * window.innerHeight;
+
+                noButton.style.left = `${newX}px`;
+                noButton.style.top = `${newY}px`;
+            }
         }
 
         function hideNo() {
-            document.getElementById('no').style.display = 'none';
+            noButton.style.display = 'none';
         }
+
+        // Show the No button initially
+        noButton.style.display = 'block';
     </script>
 </body>
 </html>
