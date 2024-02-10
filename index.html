@@ -15,7 +15,7 @@
             font-family: 'Arial', sans-serif;
         }
 
-        #container {
+        #container, #second-container {
             text-align: center;
             padding: 20px;
             background-color: #fff;
@@ -23,12 +23,13 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-        #question {
+        #question, #result {
             font-size: 28px;
             color: #333;
+            margin-bottom: 20px;
         }
 
-        #yes, #no, #yesButton {
+        #yes, #no, #yesButton, #morning, #afternoon {
             font-size: 24px;
             cursor: pointer;
             padding: 10px 20px;
@@ -38,36 +39,94 @@
             color: #fff;
         }
 
-        #yesButton {
+        #yesButton, #morning, #afternoon {
             background-color: #4caf50;
         }
 
         #no {
             background-color: #f44336;
             position: absolute;
+            z-index: 1;
         }
 
         #yes {
             display: none;
             font-size: 24px;
             color: #4caf50;
+            position: relative;
+            z-index: 2;
+        }
+
+        #winkGif {
+            display: none;
+            width: 100px;
+            height: 100px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        #valentine-theme {
+            background: #f7e0d6;
+            background: linear-gradient(to right, #f7e0d6, #f5c3bb);
+        }
+
+        #second-container {
+            display: none;
+            position: relative;
+        }
+
+        #giphy-embed {
+            width: 100%;
+            max-width: 480px;
+            height: auto;
         }
     </style>
 </head>
-<body>
+<body id="valentine-theme">
     <div id="container">
         <p id="question">Will you be my Valentine?</p>
-        <button id="yesButton" onclick="growYes()">Yes</button>
+        <button id="yesButton" onclick="showSecondContainer()">Yes</button>
         <button id="no" ontouchmove="moveNo(event)" onmousemove="moveNo(event)" onclick="hideNo()">No</button>
-        <p id="yes">Yes, I will be your Valentine! ❤️</p>
+    </div>
+
+    <div id="second-container">
+        <iframe id="giphy-embed" src="https://giphy.com/embed/xT9IgKWQeoclWggTDO" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
+        <p id="question">When are you free?</p>
+        <button id="morning" onclick="showDateResult('morning')">Morning</button>
+        <button id="afternoon" onclick="showDateResult('afternoon')">Afternoon</button>
+        <p id="result"></p>
+        <img id="winkGif" src="https://media.giphy.com/media/3o7aCUegnqlz5iGR9C/giphy.gif" alt="Wink GIF">
     </div>
 
     <script>
         let noButton = document.getElementById('no');
+        let yesButton = document.getElementById('yesButton');
+        let morningButton = document.getElementById('morning');
+        let afternoonButton = document.getElementById('afternoon');
+        let resultElement = document.getElementById('result');
+        let winkGif = document.getElementById('winkGif');
+
+        let phrases = [
+            "Don't say no",
+            "Pretty please",
+            "በናትሽ",
+            "ቾኮላታ እሰጥሻለው",
+            "I will make it two",
+            "በቃ አመረርሽ",
+            "የፍቅር አምላክ እንዳይፋረድሽ",
+            "ተይ ግን ተይ",
+            "I am not giving up on you",
+            "your rejection is my fuel",
+            "just click on Yes"
+        ];
+
+        let currentPhraseIndex = 0;
 
         function growYes() {
             noButton.style.display = 'none';
-            document.getElementById('yesButton').style.display = 'none';
+            yesButton.style.display = 'none';
             document.getElementById('question').style.display = 'none';
 
             const yesElement = document.getElementById('yes');
@@ -84,12 +143,29 @@
             }
 
             animate();
+
+            // Show the new question and options
+            showDateQuestion('When are you free?');
         }
 
-        function getRandomQuadrant() {
-            // Generate a random number between 0 and 2
-            const randomQuadrant = Math.floor(Math.random() * 3);
-            return randomQuadrant;
+        function showDateQuestion(question) {
+            document.getElementById('morning').style.display = 'block';
+            document.getElementById('afternoon').style.display = 'block';
+
+            // Update the question
+            document.getElementById('question').innerText = question;
+        }
+
+        function showDateResult(choice) {
+            morningButton.style.display = 'none';
+            afternoonButton.style.display = 'none';
+
+            // Redirect to the appropriate HTML page based on the choice
+            if (choice === 'morning') {
+                window.location.href = 'morning.html';
+            } else if (choice === 'afternoon') {
+                window.location.href = 'afternoon.html';
+            }
         }
 
         function moveNo(event) {
@@ -113,8 +189,31 @@
                 const newX = Math.random() * window.innerWidth;
                 const newY = Math.random() * window.innerHeight;
 
-                noButton.style.left = `${newX}px`;
-                noButton.style.top = `${newY}px`;
+                // Ensure buttons won't overlap
+                const yesButtonRect = yesButton.getBoundingClientRect();
+                if (newX > yesButtonRect.left && newX < yesButtonRect.right && newY > yesButtonRect.top && newY < yesButtonRect.bottom) {
+                    // If the new position overlaps with the Yes button, move the No button to a different position
+                    noButton.style.left = `${Math.random() * window.innerWidth}px`;
+                    noButton.style.top = `${Math.random() * window.innerHeight}px`;
+                } else {
+                    // Move the button to the new position
+                    noButton.style.left = `${newX}px`;
+                    noButton.style.top = `${newY}px`;
+                }
+
+                // Change the text of the button to the next phrase
+                noButton.innerText = phrases[currentPhraseIndex];
+
+                // Move to the next phrase
+                currentPhraseIndex++;
+
+                // If it's the last phrase, fix the button on that text
+                if (currentPhraseIndex === phrases.length) {
+                    currentPhraseIndex = phrases.length - 1;
+                    noButton.style.left = '50%';
+                    noButton.style.top = '50%';
+                    noButton.style.transform = 'translate(-50%, -50%)';
+                }
             }
         }
 
@@ -122,8 +221,14 @@
             noButton.style.display = 'none';
         }
 
-        // Show the No button initially
-        noButton.style.display = 'block';
+        function showSecondContainer() {
+            // Show the second container and hide the first container
+            document.getElementById('container').style.display = 'none';
+            document.getElementById('second-container').style.display = 'block';
+
+            // Display the "When are you free?" question
+            document.getElementById('question').innerText = 'When are you free?';
+        }
     </script>
 </body>
 </html>
