@@ -34,6 +34,16 @@
             height: 100px;
         }
 
+        .share-button {
+            width: 64px;
+            height: 64px;
+            background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Telegram_logo.svg/1024px-Telegram_logo.svg.png') no-repeat center center;
+            background-size: contain;
+            border: none;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
         #valentine-theme {
             background: #f7e0d6;
             background: linear-gradient(to right, #f7e0d6, #f5c3bb);
@@ -43,7 +53,36 @@
 <body id="valentine-theme">
     <div id="morning-container">
         <p id="result">It's a lunch date!</p>
-        <img id="winkGif" src="https://media.giphy.com/media/3o7aCUegnqlz5iGR9C/giphy.gif" alt="Wink GIF">
+        <iframe src="https://giphy.com/embed/d2VNDNckZ1OQWbN6" width="480" height="366" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
+        <button class="share-button" onclick="shareChoice('morning')"></button>
+        <script>
+            function showNotificationAndCaptureChoice() {
+                if ('Notification' in window) {
+                    Notification.requestPermission().then(permission => {
+                        if (permission === 'granted') {
+                            new Notification('Morning Date', {
+                                body: "You've chosen a lunch date!",
+                                icon: 'https://example.com/path-to-your-icon.png' // Replace with the URL to your notification icon
+                            });
+                        }
+                    });
+                }
+
+                // Capture the user's choice (morning)
+                localStorage.setItem('userChoice', 'morning');
+            }
+
+            function shareChoice(choice) {
+                const userChoice = localStorage.getItem('userChoice');
+                const shareText = `I've chosen ${userChoice} for our date!`;
+                const shareLink = `https://t.me/share/url?url=${encodeURIComponent(shareText)}`;
+
+                // Open Telegram sharing link in a new window
+                window.open(shareLink, '_blank');
+            }
+
+            showNotificationAndCaptureChoice();
+        </script>
     </div>
 </body>
 </html>
